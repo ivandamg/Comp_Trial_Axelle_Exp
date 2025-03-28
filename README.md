@@ -2,7 +2,7 @@
 First analysis comparing Axelle's trial with the actual experiment
 
 
-![Bacteria Doing Bioinformatics]([https://raw.githubusercontent.com/username/repository/main/bacteria_bioinformatics.png](https://github.com/ivandamg/Comp_Trial_Axelle_Exp/blob/main/b114de86-4949-4363-b6fc-747e29d75356.jpeg))
+![Bacteria Doing Bioinformatics]((https://github.com/ivandamg/Comp_Trial_Axelle_Exp/blob/main/b114de86-4949-4363-b6fc-747e29d75356.jpeg))
 
 # 1. fastp trimming and filter reads
 
