@@ -70,5 +70,5 @@ First analysis comparing Axelle's trial with the actual experiment
 
 # 11. IGView viz create bai file for vizualisation
 
-       for FILE in $(ls *.bam); do echo $FILE; sbatch --partition=pshort_el8 --job-name=faidx_$(echo $FILE | cut -d'_' -f1,2) --time=0-02:00:00 --mem-per-cpu=128G --ntasks=8 --cpus-per-task=1 --output=$(echo $FILE | cut -d'_' -f1,2)_faidx.out --error=$(echo $FILE | cut -d'_' -f1,2)_faidx.error --mail-type=END,FAIL --wrap "module load SAMtools/1.13-GCC-10.3.0; cd /data/projects/p495_SinorhizobiumMeliloti/11_dualRNAseqv2/test3/03_TrimmedData; samtools index $FILE"; done 
+       for FILE in $(ls *.bam); do echo $FILE; sbatch --partition=pshort_el8 --job-name=index_$(echo $FILE | cut -d'_' -f1,2) --time=0-02:00:00 --mem-per-cpu=128G --ntasks=8 --cpus-per-task=1 --output=$(echo $FILE | cut -d'_' -f1,2)_index.out --error=$(echo $FILE | cut -d'_' -f1,2)_index.error --mail-type=END,FAIL --wrap "module load SAMtools/1.13-GCC-10.3.0; cd /data/projects/p495_SinorhizobiumMeliloti/11_dualRNAseqv2/comp_trial_Axelle/03_TrimmedData; samtools index $FILE"; done 
 
