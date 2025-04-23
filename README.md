@@ -51,6 +51,11 @@ move genome file and gtf to referene folder
     for FILE in $(ls *.fastq); do echo $FILE; sbatch --partition=pshort_el8 --job-name=gzip$(echo $FILE | cut -d'_' -f1) --time=0-02:00:00 --mem-per-cpu=128G --ntasks=8 --cpus-per-task=1 --output=$(echo $FILE | cut -d'_' -f1)_gzip.out --error=$(echo $FILE | cut -d'_' -f1)_gzip.error --mail-type=END,FAIL --wrap " cd /data/projects/p495_SinorhizobiumMeliloti/12_dualRNAseqv3/06_UnmappedReads/ ; gzip $FILE"; done
 
 
+# 8. UMI deduplicating 
+
+        for FILE in $(ls *.bam); do echo $FILE; sbatch --partition=pshort_el8 --job-name=dedup_$(echo $FILE | cut -d'_' -f1) --time=0-02:00:00 --mem-per-cpu=128G --ntasks=8 --cpus-per-task=1 --output=$(echo $FILE | cut -d'_' -f1)_UMIdedup.out --error=$(echo $FILE | cut -d'_' -f1)_UMIdedup.error --mail-type=END,FAIL --wrap " cd /data/projects/p495_SinorhizobiumMeliloti/12_dualRNAseqv3/05_MappedMedicago; module load UMI-tools/1.0.1-foss-2021a; module load SAMtools/1.13-GCC-10.3.0; samtools sort -o $(echo $FILE | cut -d'.' -f1)_sorted.bam $FILE ; samtools index $(echo $FILE | cut -d'_' -f1)_MappedMedicago_sorted.bam; umi_tools dedup --extract-umi-method=read_id --stdin=$(echo $FILE | cut -d'_' -f1)_MappedMedicago_sorted.bam --stdout=$(echo $FILE | cut -d'_' -f1)_MappedMedicago_dedup.bam --log=$(echo $FILE | cut -d'_' -f1)_MappedMedicago_dedup.log"; done
+
+
 # 5. divide gff into proteins and others
 
     cat GCF_003473485.1_MtrunA17r5.0-ANR_genomic.gff |grep "gene_biotype=p" > Medicago_proteins.gff
