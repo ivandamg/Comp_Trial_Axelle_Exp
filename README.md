@@ -4,7 +4,22 @@ First analysis comparing Axelle's trial with the actual experiment
 
 ![Bacteria Doing Bioinformatics](https://github.com/ivandamg/Comp_Trial_Axelle_Exp/blob/main/b114de86-4949-4363-b6fc-747e29d75356.jpeg)
 
-# 1. fastp trimming and filter reads
+# 1. Change filename to discard unique names
+
+        mv WT1_L1_R1_001_gGg9DyMWQgI6.fastq.gz WT1_L1_R1.fastq.gz
+        mv WT1_L1_R2_001_GylKkOsoETPC.fastq.gz WT1_L1_R2.fastq.gz
+        mv WT1_L2_R1_001_4BOXccxl6MmC.fastq.gz WT1_L2_R1.fastq.gz
+        mv WT1_L2_R2_001_jiWnaH6npIIN.fastq.gz WT1_L2_R2.fastq.gz
+
+
+
+# 2. Extract UMI
+
+        mkdir 02_UMIExtract
+        for FILE in $(ls *_R1.fastq.gz); do echo $FILE; sbatch --partition=pibu_el8 --job-name=$(echo $FILE | cut -d'_' -f1,2)_UMI --time=0-08:00:00 --mem-per-cpu=24G --ntasks=1 --cpus-per-task=4 --output=UMI_$(echo $FILE | cut -d'_' -f1,2).out --error=UMI_$(echo $FILE | cut -d'_' -f1,2).error --mail-type=END,FAIL --wrap "cd /data/projects/p495_SinorhizobiumMeliloti/12_dualRNAseqv3/01_RawData;module load UMI-tools/1.0.1-foss-2021a; umi_tools extract --bc-pattern=NNNNNNNNNNNN --stdin=$FILE --stdout=../02_UMIExtract/$(echo $FILE | cut -d'_' -f1,2)_extracted_R1.fastq.gz --read2-in=$(echo $FILE | cut -d'_' -f1,2)_R2.fastq.gz --read2-out=../02_UMIExtract/$(echo $FILE | cut -d'_' -f1,2)_extracted_R2.fastq.gz"; sleep  1; done
+
+
+# 3. fastp trimming and filter reads
 
     for FILE in $(ls *R1.fastq.gz); do echo $FILE; sbatch --partition=pibu_el8 --job-name=$(echo $FILE | cut -d'_' -f1,2)fastp --time=0-08:00:00 --mem-per-cpu=24G --ntasks=1 --cpus-per-task=4 --output=$(echo $FILE | cut -d'_' -f1,2)_fastp.out --error=$(echo $FILE | cut -d'_' -f1,2)_fastp.error --mail-type=END,FAIL --wrap " cd /data/projects/p495_SinorhizobiumMeliloti/11_dualRNAseqv2/comp_trial_Axelle/00_RawData ; module load FastQC; module load fastp/0.23.4-GCC-10.3.0; fastp --in1 $FILE --in2 $(echo $FILE | cut -d'_' -f1,2)_R2.fastq.gz --out1 ../03_TrimmedData/$(echo $FILE | cut -d'_' -f1,2)_1_trimmed.fastq.gz --out2 ../03_TrimmedData/$(echo $FILE | cut -d'_' -f1,2)_2_trimmed.fastq.gz -h ../03_TrimmedData/$(echo $FILE | cut -d',' -f1,2)_fastp.html --thread 4; fastqc -t 4 ../03_TrimmedData/$(echo $FILE | cut -d'_' -f1,2)_1_trimmed.fastq.gz; fastqc -t 4 ../03_TrimmedData/$(echo $FILE | cut -d'_' -f1,2)_2_trimmed.fastq.gz"; sleep  1; done
 
