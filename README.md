@@ -20,7 +20,7 @@ First analysis comparing Axelle's trial with the actual experiment
 
 # 3. Check quality
 
-for FILE in $(ls *.fastq.gz); do echo $FILE; sbatch --partition=pibu_el8 --job-name=$(echo $FILE | cut -d'_' -f1,2,3)fastQC --time=0-08:00:00 --mem-per-cpu=24G --ntasks=1 --cpus-per-task=4 --output=$(echo $FILE | cut -d'_' -f1,2_3)_fastQC.out --error=$(echo $FILE | cut -d'_' -f1,2_3)_fastQC.error --mail-type=END,FAIL --wrap " cd /data/projects/p495_SinorhizobiumMeliloti/12_dualRNAseqv3/01* ; module load FastQC; fastqc -t 4 $FILE"; sleep  1; done
+        for FILE in $(ls *.fastq.gz); do echo $FILE; sbatch --partition=pibu_el8 --job-name=$(echo $FILE | cut -d'_' -f1,2,3)fastQC --time=0-08:00:00 --mem-per-cpu=24G --ntasks=1 --cpus-per-task=4 --output=$(echo $FILE | cut -d'_' -f1,2_3)_fastQC.out --error=$(echo $FILE | cut -d'_' -f1,2_3)_fastQC.error --mail-type=END,FAIL --wrap " cd /data/projects/p495_SinorhizobiumMeliloti/12_dualRNAseqv3/01* ; module load FastQC; fastqc -t 4 $FILE"; sleep  1; done
 
 # 4. Concatenate L1 and L2
 
